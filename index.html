@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Вэб Апп Бизнес Санаа</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&family=Unbounded:wght@400;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810;
+    --surface: #0f0f1a;
+    --border: rgba(255,255,255,0.07);
+    --accent1: #7c3aed;
+    --accent2: #06b6d4;
+    --accent3: #f59e0b;
+    --accent4: #ec4899;
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(124,58,237,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 60% at 60% 30%, rgba(236,72,153,0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    padding: 5rem 0 3rem;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.5);
+    color: #a78bfa;
+    padding: 0.4rem 1.2rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 0%, #a78bfa 40%, #06b6d4 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+  }
+
+  /* Stats bar */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Category filters */
+  .filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.5rem 1.2rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--accent1);
+    border-color: var(--accent1);
+    color: white;
+  }
+
+  /* Search */
+  .search-wrap {
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.9rem 1rem 0.9rem 3rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-wrap input:focus {
+    border-color: var(--accent1);
+  }
+
+  .search-wrap::before {
+    content: '🔍';
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 5rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+    animation: fadeIn 0.4s ease both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:hover {
+    border-color: rgba(124,58,237,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,58,237,0.2);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--card-accent, linear-gradient(90deg, var(--accent1), var(--accent2)));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .card-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: var(--muted);
+    background: rgba(255,255,255,0.05);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0;
+  }
+
+  .card-emoji {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #fff;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .card-footer {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-cat {
+    background: rgba(124,58,237,0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(124,58,237,0.3);
+  }
+
+  .tag-rev {
+    background: rgba(6,182,212,0.1);
+    color: #67e8f9;
+    border: 1px solid rgba(6,182,212,0.2);
+    margin-left: auto;
+  }
+
+  .difficulty {
+    display: flex;
+    gap: 3px;
+    margin-left: auto;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .dot.filled { background: var(--accent3); }
+
+  /* Hidden */
+  .card.hidden { display: none; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 4rem;
+    color: var(--muted);
+    display: none;
+    grid-column: 1/-1;
+  }
+
+  .no-results.show { display: block; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge">💡 Vibe Coded</div>
+    <h1>100 Бизнес Санаа</h1>
+    <p class="subtitle">Вэб апп, SaaS, маркетплэйс — Монголд болон дэлхийд ажиллах шилдэг 100 санаа</p>
+    
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">100</div>
+        <div class="stat-label">Нийт санаа</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">10</div>
+        <div class="stat-label">Категори</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Боломж</div>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Санаа хайх..." oninput="filterCards()">
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all', this)">Бүгд</button>
+      <button class="filter-btn" onclick="setFilter('saas', this)">SaaS</button>
+      <button class="filter-btn" onclick="setFilter('marketplace', this)">Маркетплэйс</button>
+      <button class="filter-btn" onclick="setFilter('ai', this)">AI</button>
+      <button class="filter-btn" onclick="setFilter('fintech', this)">Fintech</button>
+      <button class="filter-btn" onclick="setFilter('education', this)">Боловсрол</button>
+      <button class="filter-btn" onclick="setFilter('health', this)">Эрүүл мэнд</button>
+      <button class="filter-btn" onclick="setFilter('ecommerce', this)">E-Commerce</button>
+      <button class="filter-btn" onclick="setFilter('social', this)">Нийгэм</button>
+      <button class="filter-btn" onclick="setFilter('tools', this)">Хэрэглүүр</button>
+    </div>
+  </header>
+
+  <div class="grid" id="grid">
+    <!-- Cards will be generated by JS -->
+  </div>
+
+  <footer>
+    © 2025 — Vibe coded by Claude • 100 санаа, 100 боломж 🚀
+  </footer>
+</div>
+
+<script>
+const ideas = [
+  // SaaS
+  { n:1, emoji:"📊", title:"Монгол ХХК Данс Бүртгэлийн SaaS", desc:"Жижиг бизнесүүдэд зориулсан хялбар нягтлан бодох бүртгэлийн систем. НӨАТ, ТТ тайлан автоматаар гарна.", cat:"saas", rev:"Subscription", diff:2 },
+  { n:2, emoji:"📅", title:"Ажил захиалгын апп (Field Service)", desc:"Засчид, гагнуурч, цэвэрлэгч зэрэг үйлчилгээний ажилтнуудын захиалга, цагийн менежмент.", cat:"saas", rev:"SaaS", diff:2 },
+  { n:3, emoji:"🏢", title:"Оффисын Удирдлагын Платформ", desc:"Байрны хөлс, нийтийн үйлчилгээ, засвар, ажилтны бүртгэлийг нэг дороос удирдах.", cat:"saas", rev:"SaaS", diff:3 },
+  { n:4, emoji:"📦", title:"Агуулахын Нөөц Хянах Систем", desc:"QR код, баркодоор нөөцийн орц гарцыг хянах, автомат дахин захиалах.", cat:"saas", rev:"SaaS", diff:2 },
+  { n:5, emoji:"🎫", title:"Эвент Менежментийн Платформ", desc:"Тасалбар зарах, суудал захиалах, урилга явуулах бүгдийг нэгтгэсэн.", cat:"saas", rev:"Commission+SaaS", diff:3 },
+  { n:6, emoji:"🔑", title:"Нууц үгийн Менежер — Бизнесийн", desc:"Баг хамтын нууц үгийг аюулгүй хадгалах, хуваалцах B2B хэрэглүүр.", cat:"saas", rev:"Subscription", diff:2 },
+  { n:7, emoji:"📝", title:"Гэрээ & Баримт Үүсгэгч", desc:"AI ашиглан хөдөлмөрийн гэрээ, NDA, бусад баримт бичгийг монголоор автоматаар үүсгэх.", cat:"saas", rev:"Per doc / SaaS", diff:2 },
+  { n:8, emoji:"📞", title:"CRM Монгол бизнест", desc:"Монгол бизнесийн онцлогт тохирсон харилцагч удирдлагын систем. Viber, Facebook интеграци.", cat:"saas", rev:"SaaS", diff:3 },
+  { n:9, emoji:"🚗", title:"Тээврийн Паркийн Менежмент", desc:"Компанийн машины бүртгэл, түлш, засвар, GPS хянах.", cat:"saas", rev:"SaaS", diff:3 },
+  { n:10, emoji:"🌿", title:"Ресторан POS & Захиалга", desc:"Монгол ресторанд зориулсан хялбар POS систем. Гал тогооны дэлгэц, QR меню.", cat:"saas", rev:"SaaS+Transaction", diff:3 },
+
+  // Marketplace
+  { n:11, emoji:"🏠", title:"Монгол Түрээсийн Маркетплэйс", desc:"Орон сууц, байр, оффис түрээслэх шугаман платформ. Баталгаажсан жагсаалт, онлайн гэрээ.", cat:"marketplace", rev:"Commission", diff:3 },
+  { n:12, emoji:"👩‍💻", title:"Freelancer Маркетплэйс", desc:"Монгол фрилансерийг захиалагчтай холбох платформ. Дизайн, хөгжүүлэлт, орчуулга.", cat:"marketplace", rev:"Commission", diff:3 },
+  { n:13, emoji:"🌾", title:"Тариалан Бүтээгдэхүүний Маркет", desc:"Тариаланчид шууд хэрэглэгчдэд зарах. Дэлгүүрийг арилгасан farm-to-table.", cat:"marketplace", rev:"Commission", diff:2 },
+  { n:14, emoji:"🛋️", title:"Хэрэглэсэн Тавилгын Маркет", desc:"Гэр бүлийн тавилга, хэрэгсэл солилцох маркетплэйс. Хотоос хотод хүргэлт.", cat:"marketplace", rev:"Listing fee", diff:2 },
+  { n:15, emoji:"🎨", title:"Монгол Урлагийн Галлери Онлайн", desc:"Уран зураач, мастерийн бүтээлийг зарах дижитал галлери.", cat:"marketplace", rev:"Commission", diff:2 },
+  { n:16, emoji:"🔧", title:"Гэрийн Засварын Дарааллаас", desc:"Цахилгаанч, угаалтуурч, тоосгоч олох платформ. Үнэлгээ, хяналт, онлайн төлбөр.", cat:"marketplace", rev:"Commission", diff:2 },
+  { n:17, emoji:"📚", title:"Хуучин Номын Маркет", desc:"Их сургуулийн сурах бичиг, уран зохиол солилцох, зарах платформ.", cat:"marketplace", rev:"Transaction fee", diff:1 },
+  { n:18, emoji:"🚜", title:"Техник Хэрэгслийн Түрээс", desc:"Барилгын болон хөдөө аж ахуйн техникийг peer-to-peer түрээслэх.", cat:"marketplace", rev:"Commission", diff:3 },
+  { n:19, emoji:"💄", title:"Гоо сайхны Мэргэжилтний Маркет", desc:"Үсчин, гоо сайхны мэргэжилтэн захиалах. Гэрт буюу студид.", cat:"marketplace", rev:"Commission", diff:2 },
+  { n:20, emoji:"🎓", title:"Хувийн Сургалтын Маркет", desc:"Багш нарыг суралцагчтай холбох платформ. Математик, хэл, хөгжим.", cat:"marketplace", rev:"Commission", diff:2 },
+
+  // AI
+  { n:21, emoji:"🤖", title:"AI Монгол Контент Зохиогч", desc:"Нийгмийн сүлжээ, имэйл, мэдэгдэлд зориулсан монгол хэлний AI зохиогч.", cat:"ai", rev:"Subscription", diff:2 },
+  { n:22, emoji:"🎙️", title:"Монгол Хэлний AI Дуу Таних", desc:"Монгол хэлний ярианаас текст рүү хөрвүүлэх API & апп.", cat:"ai", rev:"API pay-per-use", diff:4 },
+  { n:23, emoji:"📄", title:"AI Баримт Орчуулагч", desc:"PDF, Word баримтыг монгол-англи/хятад хоорондоо нарийн орчуулна.", cat:"ai", rev:"Per page / SaaS", diff:3 },
+  { n:24, emoji:"🧠", title:"AI Хуулийн Зөвлөх", desc:"Хуулийн асуудал тайлбарлах, гэрээ шинжлэх AI платформ. Монгол хуулийн мэдлэгтэй.", cat:"ai", rev:"Subscription", diff:4 },
+  { n:25, emoji:"💬", title:"AI Чатбот Бизнест", desc:"Монгол дэлгүүр, банк, компаниудад суурилуулах хэрэглэгч үйлчилгээний чатбот.", cat:"ai", rev:"SaaS", diff:3 },
+  { n:26, emoji:"📊", title:"AI Судалгааны Шинжилгээ", desc:"Асуулгын хариуг AI-р шинжилж, ойлгоход хялбар тайлан гаргах.", cat:"ai", rev:"Per report / SaaS", diff:3 },
+  { n:27, emoji:"🏥", title:"AI Эмнэлгийн Туслах", desc:"Шинж тэмдэг оруулбал боломжит өвчнийг жагсаах. Эмчид илгээх санал болгох.", cat:"ai", rev:"B2B SaaS", diff:4 },
+  { n:28, emoji:"🌾", title:"AI Хөдөө Аж Ахуйн Зөвлөгч", desc:"Хөрсний чийг, цаг уур, ургацын мэдээллийг нэгтгэн тариаланчдад зөвлөгөө.", cat:"ai", rev:"SaaS", diff:4 },
+  { n:29, emoji:"🎨", title:"AI Логo & Брэнд Үүсгэгч", desc:"Компанийн нэр, чиглэлийг оруулбал хэдхэн секундэд лого үүсгэх.", cat:"ai", rev:"Per generation", diff:2 },
+  { n:30, emoji:"📱", title:"AI Нийгмийн Сүлжээний Менежер", desc:"Facebook, Instagram, Twitter постыг AI автоматаар зохиож, төлөвлөн нийтлэх.", cat:"ai", rev:"Subscription", diff:3 },
+
+  // Fintech
+  { n:31, emoji:"💸", title:"Гадаад Гуйвуулгын Платформ", desc:"Монгол-Солонгос, Монгол-АНУ хямд, хурдан мөнгөн гуйвуулга.", cat:"fintech", rev:"Transaction fee", diff:4 },
+  { n:32, emoji:"🪙", title:"Бичил Хөрөнгө Оруулалтын Апп", desc:"1000₮-с эхлэн хувьцаа, сан худалдаж авах боломж.", cat:"fintech", rev:"AUM fee", diff:4 },
+  { n:33, emoji:"📈", title:"MSE Хувьцааны Шинжилгээний Платформ", desc:"Монголын хөрөнгийн биржийн хувьцааны дэлгэрэнгүй шинжилгээ, мэдэгдэл.", cat:"fintech", rev:"Subscription", diff:3 },
+  { n:34, emoji:"💳", title:"BNPL — Монгол Дэлгүүрт", desc:"Buy Now Pay Later — монгол хэрэглэгчдэд хэдэн хувааж төлөх боломж.", cat:"fintech", rev:"Merchant fee", diff:4 },
+  { n:35, emoji:"🏦", title:"ХХК Дансны Удирдлага", desc:"Хувийн болон бизнесийн зарлага хянах, төсөв төлөвлөх апп.", cat:"fintech", rev:"Subscription", diff:2 },
+  { n:36, emoji:"🤝", title:"P2P Зээлийн Платформ", desc:"Иргэдийн хоорондын зээл олгох платформ. Credit score үнэлэмж.", cat:"fintech", rev:"Interest spread", diff:4 },
+  { n:37, emoji:"🧾", title:"Нэхэмжлэх & Төлбөр Хүлээн Авалт", desc:"Монгол бизнест зориулсан хялбар нэхэмжлэх үүсгэж, QPay/SocialPay-р хүлээн авах.", cat:"fintech", rev:"Transaction fee", diff:2 },
+  { n:38, emoji:"📉", title:"Зарлагын Зарга Шинжлэгч", desc:"Банкны гарцыг татаж, хаана хэрхэн зарцуулсныг AI шинжлэх.", cat:"fintech", rev:"Freemium", diff:2 },
+  { n:39, emoji:"🔐", title:"Крипто Холбоос — Монгол Арбитраж", desc:"Монголын крипто биржийн ханш харьцуулж, арбитраж боломж илрүүлэх.", cat:"fintech", rev:"Subscription", diff:3 },
+  { n:40, emoji:"💰", title:"Хадгаламжийн Хяналтын Апп", desc:"Зорилтот хадгаламж тохируулж, ахиц дэвшлийг харуулдаг геймификэйшн.", cat:"fintech", rev:"Freemium", diff:2 },
+
+  // Education
+  { n:41, emoji:"🎓", title:"Монгол ЭЕШ Бэлтгэлийн Платформ", desc:"Математик, Монгол хэл, Физикийн дасгал, шалгалт, алдааны шинжилгээ.", cat:"education", rev:"Subscription", diff:2 },
+  { n:42, emoji:"🌍", title:"Монгол-Англи Хэлний Хэрэглүүр", desc:"Duolingo маягаар монгол хэлийг гадаадуудад заах, англи хэлийг монголчуудад.", cat:"education", rev:"Subscription/Ads", diff:3 },
+  { n:43, emoji:"👶", title:"Хүүхдийн Монгол Цагаан Толгой Апп", desc:"Дуу, анимэйшн, тоглоомоор цагаан толгой, тоо заах интерактив апп.", cat:"education", rev:"One-time/IAP", diff:2 },
+  { n:44, emoji:"💻", title:"Кодоглох Сургалтын Платформ", desc:"Монгол хэлээр HTML, Python, JavaScript заах платформ. Live code editor.", cat:"education", rev:"Subscription", diff:3 },
+  { n:45, emoji:"🏫", title:"Сургуулийн Менежментийн Систем", desc:"Сурагч, багш, эцэг эх хоорондын холбоо. Дүн, ирц, мэдэгдэл.", cat:"education", rev:"School SaaS", diff:3 },
+  { n:46, emoji:"📖", title:"Монгол Цахим Номын Сан", desc:"Монгол ном, сурах бичгийг дижиталаар худалдах, уншуулах платформ.", cat:"education", rev:"Revenue share", diff:2 },
+  { n:47, emoji:"🎯", title:"Мэргэжлийн Тест & Сертификат", desc:"Нягтлан, хуульч, маркетерт зориулсан мэргэжлийн мэдлэгийн тест платформ.", cat:"education", rev:"Per exam", diff:3 },
+  { n:48, emoji:"🧩", title:"Хүүхдийн Бүтээлч Тоглоом", desc:"Кодоглох, зурах, бүтээх — 6-14 насны хүүхдэд зориулсан онлайн кластер.", cat:"education", rev:"Subscription", diff:3 },
+  { n:49, emoji:"🎤", title:"Монгол Дуу Сургах Апп", desc:"Сонгодог болон поп дуу дуулах техникийг алхам алхмаар заах апп.", cat:"education", rev:"Subscription", diff:2 },
+  { n:50, emoji:"🌐", title:"Дипломат & Бизнес Монгол Хэлний Курс", desc:"Гадаад улсад ажиллаж буй монголчуудад хэл, ёс зүй, протоколын сургалт.", cat:"education", rev:"Course sales", diff:2 },
+
+  // Health
+  { n:51, emoji:"🏃", title:"Монгол Фитнессийн Апп", desc:"Монгол байгаль, уур амьсгалд тохирсон дасгал, хоолны хуваарь.", cat:"health", rev:"Subscription", diff:2 },
+  { n:52, emoji:"🧘", title:"Эрүүл Мэндийн Бүртгэл & Хянах Апп", desc:"Даралт, цусан дахь сахар, жингийн хувьсалт бүртгэж, эмчид дамжуулах.", cat:"health", rev:"Freemium/B2B", diff:2 },
+  { n:53, emoji:"🥗", title:"Монгол Хоолны Калорийн Апп", desc:"Тараг, бууз, хуушуур, цуйван гэх мэт монгол хоолны тэжээлийн мэдэгдэл.", cat:"health", rev:"Freemium", diff:2 },
+  { n:54, emoji:"🩺", title:"Эмч Захиалгын Платформ", desc:"Клиник, эмч олж, цаг захиалах. Онлайн зөвлөгөө авах видео функц.", cat:"health", rev:"SaaS+Commission", diff:3 },
+  { n:55, emoji:"💊", title:"Эм Сануулагч & Менежер", desc:"Эмийн цагийг сануулж, нөөц дуусахаар автомат захиалах.", cat:"health", rev:"Freemium/Partnership", diff:2 },
+  { n:56, emoji:"🧬", title:"Генетик Тест Тайлангийн Тайлбар", desc:"Генетик шинжилгээний тайланг хялбар, ойлгомжтой тайлбарлах AI апп.", cat:"health", rev:"Per analysis", diff:3 },
+  { n:57, emoji:"😴", title:"Нойрны Шинжилгээний Апп", desc:"Утас ашиглан нойрыг хянах, хөнгөн дохиогоор сэрэхэд туслах.", cat:"health", rev:"Subscription", diff:3 },
+  { n:58, emoji:"🧠", title:"Сэтгэл Зүйн Тусламжийн Платформ", desc:"Онлайн терапи, сэтгэл санааны хянах, нэр нуусан чат.", cat:"health", rev:"Session fee", diff:3 },
+  { n:59, emoji:"🏋️", title:"Хувийн Дасгалжуулагч Хайх Апп", desc:"Gym, фитнесс коуч, хоолны дэглэм мэргэжилтэнтэй холбогдох.", cat:"health", rev:"Commission", diff:2 },
+  { n:60, emoji:"🌡️", title:"Цочмог Эмнэлгийн Ойролцоо Байршил", desc:"Яаралтай эрүүл мэндийн тусламжийн газрыг хурдан олох, замчлах GPS апп.", cat:"health", rev:"Ads/Partnership", diff:2 },
+
+  // E-commerce
+  { n:61, emoji:"🛒", title:"D2C Монгол Загварын Дэлгүүр", desc:"Монгол дизайнерийн хувцас, чимэглэл шууд хэрэглэгчдэд хүргэх.", cat:"ecommerce", rev:"Margin", diff:2 },
+  { n:62, emoji:"🎁", title:"Subscription Box — Монгол Бүтээгдэхүүн", desc:"Монгол гар урлал, хоол, гоо сайхан бүтээгдэхүүний сарын бoks.", cat:"ecommerce", rev:"Subscription", diff:2 },
+  { n:63, emoji:"🖨️", title:"Print-on-Demand Монголоор", desc:"Монгол хэв угалзаар дэвтэр, цамц, аяга хэвлэж хүргэх.", cat:"ecommerce", rev:"Margin", diff:2 },
+  { n:64, emoji:"🌿", title:"Органик Хоолны Хүргэлт", desc:"Хот орчмын фермийн шинэ хүнс, хоол захиалга, тогтмол subscribe.", cat:"ecommerce", rev:"Subscription+Margin", diff:3 },
+  { n:65, emoji:"🏺", title:"Монгол Гар Урлалын Дижитал Дэлгүүр", desc:"Эсгий эдлэл, мөнгөн зэв, ширэн бүтээл цахимаар дэлхийд зарах.", cat:"ecommerce", rev:"Commission+Margin", diff:2 },
+  { n:66, emoji:"🎮", title:"Хэрэглэсэн Гаджет & Тоног", desc:"Баталгаажсан хэрэглэсэн утас, компьютер, консол зарах платформ.", cat:"ecommerce", rev:"Commission", diff:2 },
+  { n:67, emoji:"🌸", title:"Цэцгийн Тогтмол Хүргэлт", desc:"Оффис, гэрт долоо хоног тутмын свежий цэцэг захиалах subscription.", cat:"ecommerce", rev:"Subscription", diff:1 },
+  { n:68, emoji:"🐑", title:"Монгол Кашмирын Брэнд Онлайн", desc:"Монголын кашмир, ноолуур бүтээгдэхүүнийг гадаад зах зээлд нээх.", cat:"ecommerce", rev:"Margin", diff:3 },
+  { n:69, emoji:"📦", title:"Bulk Худалдан Авалтын Клуб", desc:"Сургалт, ажлын газарт хэрэглэгддэг бараа bulk үнэтэй нийлбэр захиалга.", cat:"ecommerce", rev:"Membership+Margin", diff:2 },
+  { n:70, emoji:"🔬", title:"Лабораторийн Хэрэгслийн Онлайн Дэлгүүр", desc:"Их сургуулийн лаборатори, эрдэм шинжилгээний нийлбэр захиалга.", cat:"ecommerce", rev:"Margin", diff:2 },
+
+  // Social
+  { n:71, emoji:"🌏", title:"Гадаадад Монголчуудын Сүлжээ", desc:"Солонгос, АНУ, Европт ажиллаж буй монголчуудыг нэгтгэх нийгмийн сүлжээ.", cat:"social", rev:"Membership/Ads", diff:2 },
+  { n:72, emoji:"🤝", title:"Volunteer & Нийгэмд Туслах Апп", desc:"Сайн дурын ажил олох, NGO-тай холбогдох платформ.", cat:"social", rev:"Sponsorship", diff:1 },
+  { n:73, emoji:"💑", title:"Монгол Хосын Апп (Dating)", desc:"Монгол хэл, соёлд тулгуурласан дейтинг апп. Гэр бүл болоход чиглэсэн.", cat:"social", rev:"Subscription/IAP", diff:3 },
+  { n:74, emoji:"👨‍👩‍👧", title:"Эцэг Эхийн Нийгэмлэг", desc:"Хүүхдийн эрүүл мэнд, хоол, сургалтын асуудлаар зөвлөлдөх платформ.", cat:"social", rev:"Ads/Subscription", diff:1 },
+  { n:75, emoji:"🎵", title:"Монгол Хөгжимчдийн Платформ", desc:"Монгол хөгжимчид, хамтлагийн дуу цацах, фэнтэй холбогдох.", cat:"social", rev:"Artist commission", diff:3 },
+  { n:76, emoji:"📸", title:"Монгол Гэрэл Зургийн Олон Нийт", desc:"Монгол уран зурагч, гэрэл зурагчдад зориулсан portfolio & community платформ.", cat:"social", rev:"Subscription", diff:2 },
+  { n:77, emoji:"⚽", title:"Монгол Спортын Нийгэмлэг", desc:"Найзуудтай тоглох тохирол хийх, хөлбөмбөгийн тэмцээн зохион байгуулах апп.", cat:"social", rev:"Ads/Premium", diff:2 },
+  { n:78, emoji:"🌱", title:"Дотоодын Аялал Нийгэмлэг", desc:"Монгол нутгаар аялах бүлэг зохион байгуулах, замын зургийг хуваалцах.", cat:"social", rev:"Ads/Partnership", diff:1 },
+  { n:79, emoji:"🎲", title:"Монгол Тоглоомын Нийгэмлэг", desc:"Шатар, dominoes, карт — уламжлалт монгол тоглоомын онлайн платформ.", cat:"social", rev:"IAP", diff:2 },
+  { n:80, emoji:"🌍", title:"Хэлний Солилцооны Платформ", desc:"Монгол хэл сурах хүмүүсийг монгол хэлтэй хүмүүстэй тулгуурлан солилцох.", cat:"social", rev:"Subscription", diff:2 },
+
+  // Tools
+  { n:81, emoji:"🛠️", title:"Монгол Хаяг & Шуудангийн Стандартчилал", desc:"Монгол хаяг хуулбарлах, баталгаажуулах, стандарт форматад хөрвүүлэх API.", cat:"tools", rev:"API pay-per-use", diff:3 },
+  { n:82, emoji:"📊", title:"Нийгмийн Сүлжээний Шинжилгэгч", desc:"Facebook, Instagram, Twitter аккаунтын ажилтан, engagement шинжилгээ.", cat:"tools", rev:"SaaS", diff:2 },
+  { n:83, emoji:"🖼️", title:"Монгол Фонтын Конвертор", desc:"Дуранбичиг, MNCS, Unicode хоорондоо хөрвүүлэх вэб хэрэглүүр.", cat:"tools", rev:"Freemium/API", diff:2 },
+  { n:84, emoji:"⚡", title:"Вэбсайтын Хурдны Хянагч", desc:"Монгол вэбсайтуудын ажиллагаа, хурд, uptime хянах.", cat:"tools", rev:"Subscription", diff:2 },
+  { n:85, emoji:"🔍", title:"SEO Хэрэглүүр Монгол Хэлнээ", desc:"Монгол вэбсайтын SEO шинжилгээ, түлхүүр үгийн судалгаа.", cat:"tools", rev:"SaaS", diff:2 },
+  { n:86, emoji:"📧", title:"Имэйл Маркетингийн Платформ", desc:"Монгол контентотой имэйл кампани явуулах, дүн шинжилгээ.", cat:"tools", rev:"SaaS", diff:2 },
+  { n:87, emoji:"🎨", title:"Монгол Дизайн Хэрэглүүр", desc:"Canva маягаар монгол хэлтэй, монгол угалзтай загварт суурилсан дизайн апп.", cat:"tools", rev:"Subscription/Freemium", diff:3 },
+  { n:88, emoji:"📱", title:"QR Код Үүсгэгч & Хянагч", desc:"Бизнесийн визит карт, меню, каталогийн QR код үүсгэж, хандалтыг хянах.", cat:"tools", rev:"Freemium/SaaS", diff:1 },
+  { n:89, emoji:"🔔", title:"Цахим Мэдэгдлийн Систем", desc:"SMS, push notification, имэйлийг нэг дороос явуулах Монгол APIgateway.", cat:"tools", rev:"API pay-per-use", diff:3 },
+  { n:90, emoji:"🌐", title:"Вэбсайт Барилга Платформ", desc:"Кодгүйгээр монгол бизнест хялбар вэбсайт барих — Wix/Squarespace монгол хувилбар.", cat:"tools", rev:"Subscription", diff:4 },
+
+  // Mixed bonus ideas
+  { n:91, emoji:"🏕️", title:"Монгол Аялалын Платформ", desc:"Нутгийн гэр, ger camp, аялалын гид захиалах Airbnb-хэв маягийн апп.", cat:"marketplace", rev:"Commission", diff:3 },
+  { n:92, emoji:"🚕", title:"Аялагч Жолоочийн Хайлт", desc:"Ride-sharing монгол аялагчид — taxi app-ийн монгол хувилбар.", cat:"marketplace", rev:"Commission", diff:4 },
+  { n:93, emoji:"🍱", title:"Хоол Хүргэлтийн Платформ", desc:"Дотоодын ресторан, гэрийн тогооч нарт тулгуурласан хоол хүргэлт.", cat:"marketplace", rev:"Commission", diff:3 },
+  { n:94, emoji:"🚜", title:"Малчдын Мэдээллийн Систем", desc:"Малын тоо, байршил, өвлийн нөөц хянах ухаалаг малчдын платформ.", cat:"saas", rev:"Gov grant/SaaS", diff:3 },
+  { n:95, emoji:"☀️", title:"Нарны Эрчим Хүчний Зах", desc:"Нарны панел тавьсан гэрийн эзэд илүүдэл эрчим хүчийг зарах P2P платформ.", cat:"marketplace", rev:"Transaction fee", diff:4 },
+  { n:96, emoji:"🧹", title:"Гэрийн Цэвэрлэгчийн Апп", desc:"Гэр, оффисоо цэвэрлүүлэх баталгаатай мэргэжилтэн олох & захиалах.", cat:"marketplace", rev:"Commission", diff:2 },
+  { n:97, emoji:"🏗️", title:"Барилгын Материалын Маркет", desc:"Тоосго, цемент, хийц — жижиглэнгийн болон бөөний худалдааны платформ.", cat:"marketplace", rev:"Commission", diff:3 },
+  { n:98, emoji:"🎬", title:"Монгол Контентын Стриминг", desc:"Монгол кино, баримт бичгийн кино, сериалийн тогтмол нийтлэлт платформ.", cat:"social", rev:"Subscription", diff:4 },
+  { n:99, emoji:"🌾", title:"Цаг Уурын Тариаланчдад Апп", desc:"Монгол бүс нутгийн нарийн цаг агаарын мэдэгдэл, тариалалтын шийдвэр дэмжлэг.", cat:"tools", rev:"Freemium/B2B", diff:3 },
+  { n:100, emoji:"🏆", title:"Монгол E-Sports Платформ", desc:"Монгол геймерийн тэмцээн, rank, шагнал, стриминг нэгдсэн платформ.", cat:"social", rev:"Ads/Sponsorship", diff:3 },
+];
+
+let currentFilter = 'all';
+
+function renderCards(filtered) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="no-results show">😢 Тохирох санаа олдсонгүй. Өөр хайлт туршина уу.</div>';
+    return;
+  }
+
+  const accents = [
+    'linear-gradient(90deg, #7c3aed, #06b6d4)',
+    'linear-gradient(90deg, #ec4899, #f59e0b)',
+    'linear-gradient(90deg, #10b981, #06b6d4)',
+    'linear-gradient(90deg, #f59e0b, #ef4444)',
+    'linear-gradient(90deg, #6366f1, #8b5cf6)',
+  ];
+
+  filtered.forEach((idea, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.cat = idea.cat;
+    card.style.cssText = `--card-accent: ${accents[i % accents.length]}; animation-delay: ${(i % 12) * 0.05}s`;
+    
+    const dots = [1,2,3,4].map(d => `<div class="dot ${d <= idea.diff ? 'filled' : ''}"></div>`).join('');
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-num">${String(idea.n).padStart(2,'0')}</div>
+        <span class="card-emoji">${idea.emoji}</span>
+        <div class="card-title">${idea.title}</div>
+      </div>
+      <div class="card-desc">${idea.desc}</div>
+      <div class="card-footer">
+        <span class="tag tag-cat">${catLabel(idea.cat)}</span>
+        <span class="tag tag-rev">💰 ${idea.rev}</span>
+        <div class="difficulty" title="Хэрэгжүүлэх хэцүү байдал">${dots}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function catLabel(cat) {
+  const map = { saas:'SaaS', marketplace:'Маркетплэйс', ai:'AI', fintech:'Fintech', education:'Боловсрол', health:'Эрүүл мэнд', ecommerce:'E-Commerce', social:'Нийгэм', tools:'Хэрэглүүр' };
+  return map[cat] || cat;
+}
+
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+
+function filterCards() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = ideas.filter(idea => {
+    const matchCat = currentFilter === 'all' || idea.cat === currentFilter;
+    const matchQ = !q || idea.title.toLowerCase().includes(q) || idea.desc.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  renderCards(filtered);
+}
+
+// Initial render
+renderCards(ideas);
+</script>
+</body>
+</html>
